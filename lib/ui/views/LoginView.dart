@@ -1,10 +1,8 @@
 import 'package:flutter/material.dart';
-import 'package:lister/core/constants/RoutePaths.dart';
 import 'package:lister/core/viewmodels/views/LoginViewModel.dart';
 import 'package:lister/ui/shared/AppColors.dart';
 import 'package:lister/ui/views/BaseWidget.dart';
 import 'package:lister/ui/widgets/LoginHeaderWidget.dart';
-
 import 'package:provider/provider.dart';
 
 class LoginView extends StatefulWidget {
@@ -26,24 +24,29 @@ class _LoginViewState extends State<LoginView> {
           mainAxisAlignment: MainAxisAlignment.center,
           children: <Widget>[
             child,
-            model.busy
-                ? CircularProgressIndicator()
-                : FlatButton(
-                    color: Colors.white,
-                    child: Text(
-                      'Login',
-                      style: TextStyle(color: Colors.black),
-                    ),
-                    onPressed: () async {
-                      var loginSuccess = await model.login(_controller.text);
-                      if (loginSuccess) {
-                        Navigator.pushNamed(context, RoutePaths.Home);
-                      }
-                    },
-                  )
+            renderLogin(model),
           ],
         ),
       ),
     );
+  }
+
+  Widget renderLogin(LoginViewModel model) {
+    if (model.hasErrorMessage) {
+      return Center(
+        child: Text(model.errorMessage),
+      );
+    } else if (model.busy) {
+      return CircularProgressIndicator();
+    } else {
+      return FlatButton(
+        color: Colors.white,
+        child: Text(
+          'Login',
+          style: TextStyle(color: Colors.black),
+        ),
+        onPressed: () => model.login(_controller.text),
+      );
+    }
   }
 }
