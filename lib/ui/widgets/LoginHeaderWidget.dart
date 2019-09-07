@@ -46,6 +46,7 @@ class LoginTextField extends StatelessWidget {
       child: TextField(
         decoration: InputDecoration.collapsed(hintText: 'User Id'),
         controller: controller,
+        keyboardType: TextInputType.number,
       ),
     );
   }
